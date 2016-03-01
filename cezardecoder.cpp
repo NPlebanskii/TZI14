@@ -53,26 +53,29 @@ void CezarDecoder::decodeFile(int key)
 {
     QFile file(mFileName);
     QString data;
-    QString decodedData;
+    std::string decodedData;
     file.open(QIODevice::ReadOnly);
     if (file.isOpen())
     {
         QTextStream stream(&file);
         data = stream.readAll();
     }
-    for (int i = 0; i < data.size(); i++)
+
+    std::string dataStr = data.toStdString();
+    for (uint i = 0; i < dataStr.size(); ++i)
     {
         char symbol = data[i].toLatin1();
-        qDebug() << "data[i].toLatin(): " << data[i].row();
         qDebug() << "symbol: " << symbol;
-        decodedData += QString(QChar(symbol - key));
+        if (symbol == '\n' || symbol == '\r')
+        {
+            decodedData.push_back(symbol);
+        }
+        else
+        {
+            decodedData.push_back(symbol + static_cast<char>(key));
+        }
     }
-//    std::string dataStr = data.toStdString();
-//    for (int i = 0; i < dataStr.size(); i++)
-//    {
-
-//    }
-    qDebug() << data;
-    mDecodedString = decodedData;
+    qDebug() << decodedData.c_str();
+    mDecodedString = QString(decodedData.c_str());
 }
 
