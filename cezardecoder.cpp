@@ -64,11 +64,9 @@ void CezarDecoder::decodeFile(int key)
         data = stream.readAll();
     }
 
-    std::string dataStr = data.toStdString();
-    for (uint i = 0; i < dataStr.size(); ++i)
+    for (int i = 0; i < data.size(); ++i)
     {
         QChar symbol = data.at(i);
-        qDebug() << "symbol: " << symbol;
         if (symbol == '\n' || symbol == '\r')
         {
             decodedData.push_back(symbol);
