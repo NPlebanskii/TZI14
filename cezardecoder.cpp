@@ -5,10 +5,15 @@
 #include <algorithm>
 #include <QDebug>
 
-CezarDecoder::CezarDecoder(const QString &fileName):
+CezarDecoder::CezarDecoder(const QString &fileName, const QString &alphabet):
     mFileName(fileName),
-    mDecodedString("")
+    mDecodedString(""),
+    mAlphabet(alphabet)
 {
+    if (mAlphabet.isEmpty())
+    {
+        mAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ .,;-'";
+    }
     processFile();
 }
 
@@ -41,11 +46,9 @@ void CezarDecoder::processFile()
 
     // Getting the most frequent symbol
     int maxVal = *std::max_element(statValues.begin(), statValues.end());
-    char space = statistic.key(maxVal).at(0).toLatin1();
+    QChar space = statistic.key(maxVal).at(0);
     // Assuming, that this symbol is whitespace
-    int key = space - ' ';
-    qDebug() << "space: " << space;
-    qDebug() << "key: " << key;
+    int key = mAlphabet.indexOf(space) - mAlphabet.indexOf(' ');
     decodeFile(key);
 }
 
@@ -53,7 +56,7 @@ void CezarDecoder::decodeFile(int key)
 {
     QFile file(mFileName);
     QString data;
-    std::string decodedData;
+    QString decodedData;
     file.open(QIODevice::ReadOnly);
     if (file.isOpen())
     {
@@ -64,7 +67,7 @@ void CezarDecoder::decodeFile(int key)
     std::string dataStr = data.toStdString();
     for (uint i = 0; i < dataStr.size(); ++i)
     {
-        char symbol = data[i].toLatin1();
+        QChar symbol = data.at(i);
         qDebug() << "symbol: " << symbol;
         if (symbol == '\n' || symbol == '\r')
         {
@@ -72,10 +75,21 @@ void CezarDecoder::decodeFile(int key)
         }
         else
         {
-            decodedData.push_back(symbol + static_cast<char>(key));
+            int decodedSymbolPos = (mAlphabet.indexOf(symbol) - key) % mAlphabet.size();
+            decodedData.push_back(mAlphabet.at(decodedSymbolPos));
         }
     }
-    qDebug() << decodedData.c_str();
-    mDecodedString = QString(decodedData.c_str());
+    qDebug() << decodedData;
+    mDecodedString = decodedData;
 }
+QString CezarDecoder::alphabet() const
+{
+    return mAlphabet;
+}
+
+void CezarDecoder::setAlphabet(const QString &alphabet)
+{
+    mAlphabet = alphabet;
+}
+
 

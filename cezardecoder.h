@@ -6,12 +6,15 @@
 class CezarDecoder
 {
 public:
-    CezarDecoder(const QString &fileName = "");
+    CezarDecoder(const QString &fileName = "", const QString &alphabet = "");
 
     QString fileName() const;
     void setFileName(const QString &fileName);
 
     QString decodedString() const;
+
+    QString alphabet() const;
+    void setAlphabet(const QString &alphabet);
 
 private:
     void processFile();
@@ -19,6 +22,7 @@ private:
 
     QString mFileName;
     QString mDecodedString;
+    QString mAlphabet;
 };
 
 #endif // CEZARDECODER_H
