@@ -1,6 +1,7 @@
 #include "textstatisticgenerator.h"
 #include <QTextStream>
 #include <QFile>
+#include <QHash>
 
 TextStatisticGenerator::TextStatisticGenerator(const QString &fileName) :
     mFileName(fileName)
@@ -17,13 +18,54 @@ void TextStatisticGenerator::setFileName(const QString &fileName)
     mFileName = fileName;
 }
 
-QHash<QString, int> TextStatisticGenerator::generateStatistic(int gram)
+ListOfPair TextStatisticGenerator::generateSortedAlphaStatistic(int gram)
 {
-    QHash<QString, int> rGeneratedStatistic;
+    ListOfPair rStatisticList = generateStatistic(gram);
+    qSort(rStatisticList.begin(), rStatisticList.end(),
+          [](const QPair<QString, int> &first,
+          const QPair<QString, int> &second)
+    {
+        bool rIsLess = true;
+        if (first.first < second.first)
+        {
+            rIsLess = false;
+        }
+
+        return rIsLess;
+    });
+
+    return rStatisticList;
+}
+
+ListOfPair TextStatisticGenerator::generateSortedFreqStatistic(int gram)
+{
+    ListOfPair rStatisticList = generateStatistic(gram);
+    qSort(rStatisticList.begin(), rStatisticList.end(),
+          [](const QPair<QString, int> &first,
+          const QPair<QString, int> &second)
+    {
+        bool rIsLess = true;
+        if (first.second < second.second)
+        {
+            rIsLess = false;
+        }
+
+        return rIsLess;
+    });
+
+    return rStatisticList;
+}
+
+
+
+ListOfPair TextStatisticGenerator::generateStatistic(int gram)
+{
+    QHash<QString, int> generatedStatistic;
 
     if (mFileName.isEmpty())
     {
-        return rGeneratedStatistic;
+        ListOfPair emptyList;
+        return emptyList;
     }
 
     QFile file(mFileName);
@@ -57,13 +99,13 @@ QHash<QString, int> TextStatisticGenerator::generateStatistic(int gram)
             {
                 symbols[symbols.indexOf(" ")] = QChar('_');
             }
-            if (rGeneratedStatistic.contains(symbols))
+            if (generatedStatistic.contains(symbols))
             {
-                rGeneratedStatistic[symbols]++;
+                generatedStatistic[symbols]++;
             }
             else
             {
-                rGeneratedStatistic[symbols] = 1;
+                generatedStatistic[symbols] = 1;
             }
 
             if (gram > 1)
@@ -74,5 +116,15 @@ QHash<QString, int> TextStatisticGenerator::generateStatistic(int gram)
         }
     }
 
-    return rGeneratedStatistic;
+    ListOfPair rGeneratedList;
+
+    foreach(QString key, generatedStatistic.keys())
+    {
+        QPair<QString, int> pair;
+        pair.first = key;
+        pair.second = generatedStatistic.value(key);
+        rGeneratedList << pair;
+    }
+
+    return rGeneratedList;
 }

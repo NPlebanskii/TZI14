@@ -1,13 +1,11 @@
 #include "histogramwidget.h"
 #include <QPair>
-#include <QHash>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QFont>
 
 HistogramWidget::HistogramWidget(QWidget *parent) :
     QWidget(parent),
-    mIsSorted(false),
     mSideOffset(5),
     mTopOffset(30),
     mBottomOffset(30),
@@ -20,30 +18,6 @@ HistogramWidget::HistogramWidget(QWidget *parent) :
     setMinimumWidth(700);
 }
 
-QHash<QString, int> *HistogramWidget::data() const
-{
-    QHash<QString, int> *hash = new QHash<QString, int>();
-    for (ListOfPair::const_iterator it = mData.constBegin();
-         it != mData.constEnd(); ++it)
-    {
-        hash->insert(it->first, it->second);
-    }
-    return hash;
-}
-
-void HistogramWidget::setData(const QHash<QString, int> &data)
-{
-    foreach(QString key, data.keys())
-    {
-        QPair<QString, int> pair;
-        pair.first = key;
-        pair.second = data.value(key);
-        mData << pair;
-    }
-
-    mIsSorted = false;
-}
-
 void HistogramWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
@@ -51,10 +25,6 @@ void HistogramWidget::paintEvent(QPaintEvent *e)
     if(mData.empty())
     {
         return;
-    }
-    if(!mIsSorted)
-    {
-        sortData();
     }
 
     // Count of columns to be drawn
@@ -97,22 +67,14 @@ void HistogramWidget::paintEvent(QPaintEvent *e)
     }
 }
 
-void HistogramWidget::sortData()
+ListOfPair HistogramWidget::data() const
 {
-    qSort(mData.begin(), mData.end(),
-          [](const QPair<QString, int> &first,
-          const QPair<QString, int> &second)
-    {
-        bool rIsLess = true;
-        if (first.second < second.second)
-        {
-            rIsLess = false;
-        }
+    return mData;
+}
 
-        return rIsLess;
-    });
-
-    mIsSorted = true;
+void HistogramWidget::setData(const ListOfPair &data)
+{
+    mData = data;
 }
 
 int HistogramWidget::columnOffset() const

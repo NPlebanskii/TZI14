@@ -2,8 +2,6 @@
 #include "textstatisticgenerator.h"
 #include <QFile>
 #include <QTextStream>
-#include <algorithm>
-#include <QDebug>
 
 CezarDecoder::CezarDecoder(const QString &fileName, const QString &alphabet):
     mFileName(fileName),
@@ -39,14 +37,12 @@ void CezarDecoder::processFile()
     {
         return;
     }
+
     TextStatisticGenerator tsg(mFileName);
     // Generating symbol statistic from file
-    auto statistic = tsg.generateStatistic(1);
-    auto statValues = statistic.values();
-
+    auto statistic = tsg.generateSortedFreqStatistic(1);
     // Getting the most frequent symbol
-    int maxVal = *std::max_element(statValues.begin(), statValues.end());
-    QChar space = statistic.key(maxVal).at(0);
+    QChar space = statistic[0].first.at(0);
     // Assuming, that this symbol is whitespace
     int key = mAlphabet.indexOf(space) - mAlphabet.indexOf(' ');
     decodeFile(key);
@@ -77,7 +73,7 @@ void CezarDecoder::decodeFile(int key)
             decodedData.push_back(mAlphabet.at(decodedSymbolPos));
         }
     }
-    qDebug() << decodedData;
+
     mDecodedString = decodedData;
 }
 QString CezarDecoder::alphabet() const

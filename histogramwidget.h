@@ -15,9 +15,6 @@ class HistogramWidget : public QWidget
 public:
     explicit HistogramWidget(QWidget *parent = 0);
 
-    QHash<QString, int> *data() const;
-    void setData(const QHash<QString, int> &data);
-
     int columnNumber() const;
     void setColumnNumber(int columnNumber);
 
@@ -36,17 +33,13 @@ public:
     int columnOffset() const;
     void setColumnOffset(int columnOffset);
 
+    ListOfPair data() const;
+    void setData(const ListOfPair &data);
+
 protected:
     void paintEvent(QPaintEvent *e);
 
-signals:
-
-public slots:
-
 private:
-    void sortData();
-
-    bool mIsSorted;
     ListOfPair mData;
     int mSideOffset;
     int mTopOffset;
