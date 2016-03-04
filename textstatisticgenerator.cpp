@@ -25,10 +25,10 @@ ListOfPair TextStatisticGenerator::generateSortedAlphaStatistic(int gram)
           [](const QPair<QString, int> &first,
           const QPair<QString, int> &second)
     {
-        bool rIsLess = true;
-        if (first.first < second.first)
+        bool rIsLess = false;
+        if (QString::compare(first.first, second.first) < 0)
         {
-            rIsLess = false;
+            rIsLess = true;
         }
 
         return rIsLess;

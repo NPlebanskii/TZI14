@@ -30,7 +30,12 @@ void HistogramWidget::paintEvent(QPaintEvent *e)
     // Count of columns to be drawn
     int count = mColumnNumber;
     // Maximum frequency of elements from mData
-    int maxFreq = mData[0].second;
+    int maxFreq = std::max_element(mData.begin(), mData.begin() + count,
+                                   [] (const QPair<QString, int> &first,
+                                   const QPair<QString, int> &second)
+    {
+        return (first.second < second.second);
+    })->second;
     // Maximum height for column
     int maxHeight = e->rect().height() - mTopOffset - mBottomOffset;
     // Width of single column
