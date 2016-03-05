@@ -8,7 +8,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QString projectPath = "D:\\NazarsProjectsProgramming\\Qt_projects\\TZI_1\\";
+
+    QString projectPath = "D:\\Qt_Projects\\TZI14\\TZI14\\";
 
     HistogramWidget hwEnglishSymbol;
     hwEnglishSymbol.setColumnNumber(30);
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
     hwEnglishTrigram.show();
 
     CezarDecoder cd(projectPath + "SH_VT18");
-    cd.writeDecodedStringToFile("decodedText");
+    cd.writeDecodedStringToFile(projectPath + "decodedText");
 
     return a.exec();
 }
