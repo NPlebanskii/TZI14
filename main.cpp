@@ -10,33 +10,37 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QString projectPath = "D:\\NazarsProjectsProgramming\\Qt_projects\\TZI_1\\";
 
-    HistogramWidget hwEnglish;
-    hwEnglish.setColumnNumber(30);
+    HistogramWidget hwEnglishSymbol;
+    hwEnglishSymbol.setColumnNumber(30);
     TextStatisticGenerator tsg;
     tsg.setFileName(projectPath + "englishText.txt");
-    hwEnglish.setData(tsg.generateSortedFreqStatistic(1));
-    hwEnglish.show();
+    hwEnglishSymbol.setData(tsg.generateSortedFreqStatistic(1));
+    hwEnglishSymbol.setWindowTitle("English text single-symbol statistic");
+    hwEnglishSymbol.show();
 
-    HistogramWidget hwUkrainian;
+    HistogramWidget hwUkrainianSymbol;
     tsg.setFileName(projectPath + "ukrainianText.txt");
-    hwUkrainian.setData(tsg.generateSortedAlphaStatistic(1));
-    hwUkrainian.setColumnNumber(36);
-    hwUkrainian.show();
+    hwUkrainianSymbol.setData(tsg.generateSortedFreqStatistic(1));
+    hwUkrainianSymbol.setColumnNumber(36);
+    hwUkrainianSymbol.setWindowTitle("Ukrainian text single-symbol statistic");
+    hwUkrainianSymbol.show();
 
-    HistogramWidget hwTest;
+    HistogramWidget hwEnglishBigram;
     tsg.setFileName(projectPath + "englishText.txt");
-    hwTest.setColumnNumber(15);
-    hwTest.setData(tsg.generateSortedFreqStatistic(2));
-    hwTest.show();
+    hwEnglishBigram.setColumnNumber(15);
+    hwEnglishBigram.setData(tsg.generateSortedFreqStatistic(2));
+    hwEnglishBigram.setWindowTitle("English text bigram statistic");
+    hwEnglishBigram.show();
 
-    HistogramWidget hwTest2;
+    HistogramWidget hwEnglishTrigram;
     tsg.setFileName(projectPath + "englishText.txt");
-    hwTest2.setColumnNumber(15);
-    hwTest2.setData(tsg.generateSortedFreqStatistic(3));
-    hwTest2.show();
+    hwEnglishTrigram.setColumnNumber(15);
+    hwEnglishTrigram.setData(tsg.generateSortedFreqStatistic(3));
+    hwEnglishTrigram.setWindowTitle("English text trigram statistic");
+    hwEnglishTrigram.show();
 
     CezarDecoder cd(projectPath + "SH_VT18");
-    qDebug() << cd.decodedString();
+    cd.writeDecodedStringToFile("decodedText");
 
     return a.exec();
 }

@@ -2,6 +2,7 @@
 #include "textstatisticgenerator.h"
 #include <QFile>
 #include <QTextStream>
+#include <iostream>
 
 CezarDecoder::CezarDecoder(const QString &fileName, const QString &alphabet):
     mFileName(fileName),
@@ -59,6 +60,11 @@ void CezarDecoder::decodeFile(int key)
         QTextStream stream(&file);
         data = stream.readAll();
     }
+    else
+    {
+        std::cerr << "Failed to open file" << file.fileName().toStdString()
+                  << "for reading!" << std::endl;
+    }
 
     for (int i = 0; i < data.size(); ++i)
     {
@@ -84,6 +90,22 @@ QString CezarDecoder::alphabet() const
 void CezarDecoder::setAlphabet(const QString &alphabet)
 {
     mAlphabet = alphabet;
+}
+
+void CezarDecoder::writeDecodedStringToFile(const QString &fileName)
+{
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+    if (file.isOpen())
+    {
+        QTextStream stream(&file);
+        stream << mDecodedString;
+    }
+    else
+    {
+        std::cerr << "Failed to open file" << file.fileName().toStdString()
+                  << "for reading!" << std::endl;
+    }
 }
 
 

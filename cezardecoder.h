@@ -16,6 +16,8 @@ public:
     QString alphabet() const;
     void setAlphabet(const QString &alphabet);
 
+    void writeDecodedStringToFile(const QString &fileName);
+
 private:
     void processFile();
     void decodeFile(int key);
