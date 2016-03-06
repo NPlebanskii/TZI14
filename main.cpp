@@ -2,14 +2,16 @@
 #include "histogramwidget.h"
 #include "textstatisticgenerator.h"
 #include "cezardecoder.h"
+#include "vigenerecode.h"
 #include <QString>
-#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QString projectPath = "D:\\Qt_Projects\\TZI14\\TZI14\\";
+    /* D:\\NazarsProjectsProgramming\\Qt_projects\\TZI_1\\
+       D:\\Qt_Projects\\TZI14\\TZI14\\ */
+    QString projectPath = "D:\\NazarsProjectsProgramming\\Qt_projects\\TZI_1\\";
 
     HistogramWidget hwEnglishSymbol;
     hwEnglishSymbol.setColumnNumber(30);
@@ -41,7 +43,11 @@ int main(int argc, char *argv[])
     hwEnglishTrigram.show();
 
     CezarDecoder cd(projectPath + "SH_VT18");
-    cd.writeDecodedStringToFile(projectPath + "decodedText");
+    cd.writeDecodedStringToFile(projectPath + "decodedCezarText");
 
+    VigenereCode vc("NAZARIIPLEBANSKII", projectPath + "decodedCezarText");
+    vc.codeTextToFile(projectPath + "codedVigenereText");
+    vc.setFileName(projectPath + "codedVigenereText");
+    vc.decodeTextToFile(projectPath + "decodedVigenereText");
     return a.exec();
 }

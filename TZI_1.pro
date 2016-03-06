@@ -17,9 +17,11 @@ CONFIG += c++11
 SOURCES += main.cpp\
     histogramwidget.cpp \
     textstatisticgenerator.cpp \
-    cezardecoder.cpp
+    cezardecoder.cpp \
+    vigenerecode.cpp
 
 HEADERS  += \
     histogramwidget.h \
     textstatisticgenerator.h \
-    cezardecoder.h
+    cezardecoder.h \
+    vigenerecode.h

@@ -6,17 +6,11 @@
 class VigenereCode
 {
 public:
-    VigenereCode(const QString &keyWord = "", const QString &readFile = "",
-                 const QString &writeFile = "");
+    VigenereCode(const QString &keyWord = "", const QString &fileName = "",
+                 const QString &alphabet = "");
 
-    QString readFileName() const;
-    void setReadFileName(const QString &readFileName);
-
-    QString writeFileName() const;
-    void setWriteFileName(const QString &writeFileName);
-
-    void codeTextToFile();
-    void decodeTextToFile();
+    void codeTextToFile(const QString &fileName);
+    void decodeTextToFile(const QString &fileName);
 
     QString alphabet() const;
     void setAlphabet(const QString &alphabet);
@@ -24,11 +18,17 @@ public:
     QString keyWord() const;
     void setKeyWord(const QString &keyWord);
 
+    QString fileName() const;
+    void setFileName(const QString &fileName);
+
+    QString text() const;
+
 private:
+    void getTextFromFile();
+
     QString mKeyWord;
     QString mAlphabet;
-    QString mReadFileName;
-    QString mWriteFileName;
+    QString mFileName;
     QString mText;
 };
 
