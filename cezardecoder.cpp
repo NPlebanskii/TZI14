@@ -46,6 +46,7 @@ void CezarDecoder::processFile()
     QChar space = statistic[0].first.at(0);
     // Assuming, that this symbol is whitespace
     int key = mAlphabet.indexOf(space) - mAlphabet.indexOf(' ');
+    std::cout << "cezar key: " << key << std::endl;
     decodeFile(key);
 }
 
