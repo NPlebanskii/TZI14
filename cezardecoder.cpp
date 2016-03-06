@@ -83,6 +83,7 @@ void CezarDecoder::decodeFile(int key)
 
     mDecodedString = decodedData;
 }
+
 QString CezarDecoder::alphabet() const
 {
     return mAlphabet;

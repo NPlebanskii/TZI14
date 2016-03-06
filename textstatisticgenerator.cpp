@@ -2,6 +2,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QHash>
+#include <iostream>
 
 TextStatisticGenerator::TextStatisticGenerator(const QString &fileName) :
     mFileName(fileName)
@@ -70,7 +71,7 @@ ListOfPair TextStatisticGenerator::generateStatistic(int gram)
 
     QFile file(mFileName);
     file.open(QIODevice::ReadOnly);
-
+    int i = 0;
     // Reading all symbols from file
     if (file.isOpen())
     {
@@ -80,6 +81,10 @@ ListOfPair TextStatisticGenerator::generateStatistic(int gram)
         {
             symbols = stream.read(gram);
             symbols = symbols.toUpper();
+            if (symbols.size() < gram)
+            {
+                break;
+            }
             // Skipping escape-symbols
             if (symbols.contains("\n") || symbols.contains("\r"))
             {
@@ -90,12 +95,8 @@ ListOfPair TextStatisticGenerator::generateStatistic(int gram)
                 }
                 continue;
             }
-            if (symbols.size() < gram)
-            {
-                break;
-            }
             // Transforming whitespace into underscore in order to see symbol
-            if (symbols.contains(" "))
+            while (symbols.contains(" "))
             {
                 symbols[symbols.indexOf(" ")] = QChar('_');
             }
@@ -112,6 +113,11 @@ ListOfPair TextStatisticGenerator::generateStatistic(int gram)
             {
                 // Moving pointer on one symbol backward
                 stream.seek(stream.pos() - 1);
+            }
+            ++i;
+            if (i == 631)
+            {
+                std::cout << i;
             }
         }
     }
